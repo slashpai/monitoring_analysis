@@ -77,32 +77,42 @@ module PromCheck
       label_value_hash = {}
       largest_in_each_label = []
       rows = []
-      # puts '----------------------------------------------------------'
-      # PromCheck.logger.debug "\nLabel and corresponding values"
-      # puts '----------------------------------------------------------'
+      puts "\n----------------------------------------------------------"
+      PromCheck.logger.debug "\nLabel and corresponding values"
+      puts '----------------------------------------------------------'
       PromCheck.prom_label_values.each do |label, values|
-        # PromCheck.logger.debug "| #{label} \t|  #{values} |"
+        PromCheck.logger.debug "| #{label} \t|  #{values} |"
         value_lengths = get_label_value_length(values)
         rows << [label, value_lengths]
         label_value_hash.merge!(value_lengths)
       end
 
-      puts '----------------------------------------------------------'
+      puts "\n----------------------------------------------------------"
       PromCheck.logger.debug 'Labels and corresponding value along its length'
       puts '----------------------------------------------------------'
       rows.each do |row|
-        PromCheck.logger.debug "| #{row[0]} |\t#{row[1]} |"
+        PromCheck.logger.debug "| #{row[0]} |\t#{row[1].values} |"
         largest_in_each_label << row[1].values.sort.reverse[0]
       end
-      puts '----------------------------------------------------------'
+      puts "\n----------------------------------------------------------"
       PromCheck.logger.info 'Labels values along with its length in descending order'
       puts '----------------------------------------------------------'
       label_value_hash = label_value_hash.sort_by { |_k, v| v }.reverse
       label_value_hash.each do |value, length|
-        PromCheck.logger.info "#{value}\t#{length}"
+        # checking metric this way wouldn't be 100% accurate if we don't check every label so search_value_label() checks all labels
+        PromCheck.logger.info "labels #{search_value_label(value)} #{value}\t#{length}"
       end
 
       PromCheck.prom_label_analysis << "Largest value length from label values: #{largest_in_each_label.sort.reverse[0]}"
+    end
+
+    # search labels with given label value
+    def search_value_label(label_value)
+      labels = []
+      PromCheck.prom_label_values.each do |key, values|
+        labels << key if values.include?(label_value)
+      end
+      return labels
     end
   end
 end
