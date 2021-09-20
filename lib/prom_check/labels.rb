@@ -65,32 +65,43 @@ module PromCheck
 
     # get length of each label value
     def get_label_value_length(label_values)
-      lengths = []
+      value_lengths = {}
       label_values.each do |lv|
-        lengths << lv.size
+        value_lengths[lv] = lv.size
       end
-      lengths
+      value_lengths
     end
 
     # analyze label values
     def analyze_label_values
+      label_value_hash = {}
       largest_in_each_label = []
       rows = []
-      puts '----------------------------------------------------------'
-      PromCheck.logger.debug "\nLabel and corresponding values"
-      puts '----------------------------------------------------------'
+      # puts '----------------------------------------------------------'
+      # PromCheck.logger.debug "\nLabel and corresponding values"
+      # puts '----------------------------------------------------------'
       PromCheck.prom_label_values.each do |label, values|
-        PromCheck.logger.debug "| #{label} \t|  #{values} |"
-        rows << [label, get_label_value_length(values)]
+        # PromCheck.logger.debug "| #{label} \t|  #{values} |"
+        value_lengths = get_label_value_length(values)
+        rows << [label, value_lengths]
+        label_value_hash.merge!(value_lengths)
       end
 
       puts '----------------------------------------------------------'
-      PromCheck.logger.debug 'Labels and corresponding value lengths'
+      PromCheck.logger.debug 'Labels and corresponding value along its length'
       puts '----------------------------------------------------------'
       rows.each do |row|
         PromCheck.logger.debug "| #{row[0]} |\t#{row[1]} |"
-        largest_in_each_label << row[1].sort.reverse[0]
+        largest_in_each_label << row[1].values.sort.reverse[0]
       end
+      puts '----------------------------------------------------------'
+      PromCheck.logger.info 'Labels values along with its length in descending order'
+      puts '----------------------------------------------------------'
+      label_value_hash = label_value_hash.sort_by { |_k, v| v }.reverse
+      label_value_hash.each do |value, length|
+        PromCheck.logger.info "#{value}\t#{length}"
+      end
+
       PromCheck.prom_label_analysis << "Largest value length from label values: #{largest_in_each_label.sort.reverse[0]}"
     end
   end
