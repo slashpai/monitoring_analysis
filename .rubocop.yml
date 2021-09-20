@@ -1,0 +1,18 @@
+# Global options
+AllCops:
+  DisplayCopNames: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/MethodLength:
+  # This cop checks if the length of a method exceeds some maximum value
+  Enabled: true
+  Max: 25
+
+Metrics/AbcSize:
+  Max: 60
+
+Layout/LineLength:
+  Enabled: true
+  Max: 130

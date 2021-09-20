@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'prom_check'
+
+begin
+  # ENV['THOR_DEBUG'] = 1
+  PromCheck::Commands.start(ARGV)
+rescue PromCheck::Error => e
+  puts e
+end
