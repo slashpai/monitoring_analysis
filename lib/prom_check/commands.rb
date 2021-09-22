@@ -3,8 +3,8 @@ module PromCheck
   # Contains Possible CLI Options
   class Commands < Thor
     include Helper
-    class_option :log_level, type: :string, default: 'info', aliases: '-l'
-    class_option :prom_url, type: :string, default: 'http://localhost:9090', required: true, aliases: '-u'
+    class_option :log_level, type: :string, desc: 'loglevel, default info', aliases: '-l'
+    class_option :prom_url, type: :string, desc: 'prometheus_url, default http://localhost:9090', aliases: '-u'
 
     desc 'labels', 'Get Labels'
     def labels
@@ -14,6 +14,8 @@ module PromCheck
     end
 
     desc 'review_labels', 'Review Labels'
+    # label value display count
+    method_option :lv_display_count, type: :numeric, default: 100000, aliases: '-n'
     def review_labels
       validate_options(options)
       PromCheck.logger.info 'Reviewing labels'

@@ -3,6 +3,7 @@ module PromCheck
   module Helper
     def validate_options(options)
       PromCheck.log_level = options[:log_level] ? options[:log_level].upcase : 'INFO'
+      PromCheck.prom_url = options[:prom_url] ? options[:prom_url] : 'http://localhost:9090'
     end
 
     # print table
@@ -20,6 +21,12 @@ module PromCheck
         counter += 1
         puts "#{counter}\t #{row}"
       end
+    end
+
+    # draw line
+    def draw_line(newline = false)
+      puts "\n----------------------------------------------------------" if newline
+      puts "----------------------------------------------------------" unless newline
     end
   end
 end
