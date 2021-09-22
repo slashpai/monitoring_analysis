@@ -1,11 +1,19 @@
 #!/usr/bin/env ruby
-# frozen_string_literal: true
 
 require 'prom_check'
 
 begin
-  # ENV['THOR_DEBUG'] = 1
+  ENV['THOR_DEBUG'] = "1"
+  ENV['THOR_SILENCE_DEPRECATION'] = "1"
   PromCheck::Commands.start(ARGV)
+rescue Thor::UndefinedCommandError => e
+  PromCheck.logger.error 'Not a valid command'
+  PromCheck.logger.error e.message
+  PromCheck::Commands.help(Thor::Base.shell.new)
+rescue Thor::RequiredArgumentMissingError => e
+  PromCheck.logger.error 'Missing required argument'
+  PromCheck.logger.error e.message
+  PromCheck::Commands.help(Thor::Base.shell.new)
 rescue PromCheck::Error => e
   puts e
 end
