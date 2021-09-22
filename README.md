@@ -13,9 +13,8 @@ gem install prom_check-<VERSION>.gem
 
 ## Features
 
-[x] Get Labels
-
-[x] Review Labels
+- [x] Get Labels
+- [x] Review Labels
 
 ## Usage
 
@@ -32,6 +31,71 @@ Options:
   -u, --prom-url=PROM_URL      
                                # Default: http://localhost:9090
 ```
+
+### Get Labels
+
+```ruby
+Usage:
+  prom_check labels
+
+Options:
+  -l, [--log-level=LOG_LEVEL]  # loglevel, default info
+  -u, [--prom-url=PROM_URL]    # prometheus_url, default http://localhost:9090
+
+Get Labels
+```
+
+### Review Labels
+
+```ruby
+Usage:
+  prom_check review_labels
+
+Options:
+  -n, [--lv-display-count=N]
+                               # Default: 100000
+  -l, [--log-level=LOG_LEVEL]  # loglevel, default info
+  -u, [--prom-url=PROM_URL]    # prometheus_url, default http://localhost:9090
+
+Review Labels
+```
+
+### Examples
+
+#### Get Labels
+
+- Without debug mode
+
+    ```ruby
+    prom_check labels -u http://demo.robustperception.io:9090
+    ```
+
+- With debug mode
+    **Note:** Nothing specific in debug mode for this command
+
+    ```ruby
+    prom_check labels -u http://demo.robustperception.io:9090 -l debug
+    ```
+
+#### Review Labels
+
+- Without debug mode
+
+  ```ruby
+  prom_check review_labels -u http://demo.robustperception.io:9090
+  ```
+
+- With debug mode
+
+  ```ruby
+  prom_check labels -u http://demo.robustperception.io:9090 -l debug
+  ```
+
+- Display only top 20 label values by label value length (default if not passed the `-n` flag it will display all (max 100000))
+
+  ```ruby
+  prom_check review_labels -n 20 -u http://demo.robustperception.io:9090
+  ```
 
 ## Development
 
