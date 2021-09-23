@@ -1,0 +1,10 @@
+Dockerfile
+spec
+LICENSE
+.gitignore
+.dockerignore
+.rspec
+.rubocop.yml
+*.txt
+*.lock
+CHANGELOG.MD
